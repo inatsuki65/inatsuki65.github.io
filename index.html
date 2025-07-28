@@ -214,15 +214,15 @@
   </form>
   <h1>アンケート → ライントレース用PIDコード生成</h1>
   <div class="section">
-    <h2>アンケートスコア入力（0〜30）</h2>
+    <h2>アンケートスコア結果（0〜30）</h2>
     <div class="question">
-      比例スコア（0〜30）: <input type="number" id="scoreP" min="0" max="30" value="15">
+      比例スコア（0〜30）: <textarea id="scoreP" readonly></textarea>
     </div>
     <div class="question">
-      微分スコア（0〜30）: <input type="number" id="scoreD" min="0" max="30" value="15">
+      微分スコア（0〜30）: <textarea id="scoreD" readonly></textarea>
     </div>
     <div class="question">
-      積分スコア（0〜30）: <input type="number" id="scoreI" min="0" max="30" value="15">
+      積分スコア（0〜30）: <textarea id="scoreI" readonly></textarea>
     </div>
     <button onclick="generateCode()">コード生成</button>
   </div>
