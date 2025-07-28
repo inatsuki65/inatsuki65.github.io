@@ -41,10 +41,178 @@
       background: #19426b;
     }
   </style>
+  <style>
+    body { font-family: sans-serif; background: #f4f4f4; padding: 24px; }
+    h2 { margin-top: 32px; color: #336699;}
+    .block { background: #fff; border-radius: 8px; padding: 16px 24px; margin-bottom: 20px; box-shadow: 0 2px 8px #ccc;}
+    .question { margin-bottom: 12px; }
+    label { margin-right: 14px; }
+    .submit-btn { background: #336699; color: #fff; padding: 10px 30px; border: none; border-radius: 6px; font-size: 1rem; margin-top: 24px; cursor: pointer;}
+    .submit-btn:hover { background: #19426b; }
+  </style>
 </head>
 <body>
+  <h1>知覚回路アンケート（1セット目）</h1>
+  <form id="form">
+      <div class="block">
+          <h2>比例回路</h2>
+          <!-- 比例 6問 -->
+          <div class="question">1. 目の前の課題には、まず「やるべきこと」を整理して取り組む。
+              <br>
+              <label><input type="radio" name="p1" value="1">1</label>
+              <label><input type="radio" name="p1" value="2">2</label>
+              <label><input type="radio" name="p1" value="3">3</label>
+              <label><input type="radio" name="p1" value="4">4</label>
+              <label><input type="radio" name="p1" value="5">5</label>
+          </div>
+          <div class="question">2. 状況に合わせて行動を柔軟に変えるのは得意だ。
+              <br>
+              <label><input type="radio" name="p2" value="1">1</label>
+              <label><input type="radio" name="p2" value="2">2</label>
+              <label><input type="radio" name="p2" value="3">3</label>
+              <label><input type="radio" name="p2" value="4">4</label>
+              <label><input type="radio" name="p2" value="5">5</label>
+          </div>
+          <div class="question">3. 現実的で実務的な話の方が、抽象的な話よりわかりやすい。
+              <br>
+              <label><input type="radio" name="p3" value="1">1</label>
+              <label><input type="radio" name="p3" value="2">2</label>
+              <label><input type="radio" name="p3" value="3">3</label>
+              <label><input type="radio" name="p3" value="4">4</label>
+              <label><input type="radio" name="p3" value="5">5</label>
+          </div>
+          <div class="question">4. 予定が崩れるとストレスを感じる。
+              <br>
+              <label><input type="radio" name="p4" value="1">1</label>
+              <label><input type="radio" name="p4" value="2">2</label>
+              <label><input type="radio" name="p4" value="3">3</label>
+              <label><input type="radio" name="p4" value="4">4</label>
+              <label><input type="radio" name="p4" value="5">5</label>
+          </div>
+          <div class="question">5. 「今この場で何が必要か」を考えて動くことが多い。
+              <br>
+              <label><input type="radio" name="p5" value="1">1</label>
+              <label><input type="radio" name="p5" value="2">2</label>
+              <label><input type="radio" name="p5" value="3">3</label>
+              <label><input type="radio" name="p5" value="4">4</label>
+              <label><input type="radio" name="p5" value="5">5</label>
+          </div>
+          <div class="question">6. 他人の発言は、まず言葉通りに受け取る。
+              <br>
+              <label><input type="radio" name="p6" value="1">1</label>
+              <label><input type="radio" name="p6" value="2">2</label>
+              <label><input type="radio" name="p6" value="3">3</label>
+              <label><input type="radio" name="p6" value="4">4</label>
+              <label><input type="radio" name="p6" value="5">5</label>
+          </div>
+      </div>
+      <div class="block">
+          <h2>微分回路</h2>
+          <!-- 微分 6問 -->
+          <div class="question">1. 人の表情やしぐさのわずかな変化にすぐ気づく。
+              <br>
+              <label><input type="radio" name="d1" value="1">1</label>
+              <label><input type="radio" name="d1" value="2">2</label>
+              <label><input type="radio" name="d1" value="3">3</label>
+              <label><input type="radio" name="d1" value="4">4</label>
+              <label><input type="radio" name="d1" value="5">5</label>
+          </div>
+          <div class="question">2. 空気が変わったときに、言葉にできない違和感を感じることが多い。
+              <br>
+              <label><input type="radio" name="d2" value="1">1</label>
+              <label><input type="radio" name="d2" value="2">2</label>
+              <label><input type="radio" name="d2" value="3">3</label>
+              <label><input type="radio" name="d2" value="4">4</label>
+              <label><input type="radio" name="d2" value="5">5</label>
+          </div>
+          <div class="question">3. 初対面でも「この人とは合わなそう」とすぐに察する。
+              <br>
+              <label><input type="radio" name="d3" value="1">1</label>
+              <label><input type="radio" name="d3" value="2">2</label>
+              <label><input type="radio" name="d3" value="3">3</label>
+              <label><input type="radio" name="d3" value="4">4</label>
+              <label><input type="radio" name="d3" value="5">5</label>
+          </div>
+          <div class="question">4. 「なんとなくイヤな予感がする」が的中することがある。
+              <br>
+              <label><input type="radio" name="d4" value="1">1</label>
+              <label><input type="radio" name="d4" value="2">2</label>
+              <label><input type="radio" name="d4" value="3">3</label>
+              <label><input type="radio" name="d4" value="4">4</label>
+              <label><input type="radio" name="d4" value="5">5</label>
+          </div>
+          <div class="question">5. 言葉よりも、その時の「雰囲気」が気になってしまう。
+              <br>
+              <label><input type="radio" name="d5" value="1">1</label>
+              <label><input type="radio" name="d5" value="2">2</label>
+              <label><input type="radio" name="d5" value="3">3</label>
+              <label><input type="radio" name="d5" value="4">4</label>
+              <label><input type="radio" name="d5" value="5">5</label>
+          </div>
+          <div class="question">6. 他人の言動に過剰に反応してしまうことがある。
+              <br>
+              <label><input type="radio" name="d6" value="1">1</label>
+              <label><input type="radio" name="d6" value="2">2</label>
+              <label><input type="radio" name="d6" value="3">3</label>
+              <label><input type="radio" name="d6" value="4">4</label>
+              <label><input type="radio" name="d6" value="5">5</label>
+          </div>
+      </div>
+      <div class="block">
+          <h2>積分回路</h2>
+          <!-- 積分 6問 -->
+          <div class="question">1. 映画や本を見た後、その感情が長く残る方だ。
+              <br>
+              <label><input type="radio" name="i1" value="1">1</label>
+              <label><input type="radio" name="i1" value="2">2</label>
+              <label><input type="radio" name="i1" value="3">3</label>
+              <label><input type="radio" name="i1" value="4">4</label>
+              <label><input type="radio" name="i1" value="5">5</label>
+          </div>
+          <div class="question">2. 今の自分があるのは、過去の経験の積み重ねだと感じる。
+              <br>
+              <label><input type="radio" name="i2" value="1">1</label>
+              <label><input type="radio" name="i2" value="2">2</label>
+              <label><input type="radio" name="i2" value="3">3</label>
+              <label><input type="radio" name="i2" value="4">4</label>
+              <label><input type="radio" name="i2" value="5">5</label>
+          </div>
+          <div class="question">3. 人の言葉の「背景」や「事情」を自然と想像してしまう。
+              <br>
+              <label><input type="radio" name="i3" value="1">1</label>
+              <label><input type="radio" name="i3" value="2">2</label>
+              <label><input type="radio" name="i3" value="3">3</label>
+              <label><input type="radio" name="i3" value="4">4</label>
+              <label><input type="radio" name="i3" value="5">5</label>
+          </div>
+          <div class="question">4. 初対面の人でも「この人の人生には何があったんだろう」と気になる。
+              <br>
+              <label><input type="radio" name="i4" value="1">1</label>
+              <label><input type="radio" name="i4" value="2">2</label>
+              <label><input type="radio" name="i4" value="3">3</label>
+              <label><input type="radio" name="i4" value="4">4</label>
+              <label><input type="radio" name="i4" value="5">5</label>
+          </div>
+          <div class="question">5. 自分に起きた出来事には、何かしら意味があると感じる。
+              <br>
+              <label><input type="radio" name="i5" value="1">1</label>
+              <label><input type="radio" name="i5" value="2">2</label>
+              <label><input type="radio" name="i5" value="3">3</label>
+              <label><input type="radio" name="i5" value="4">4</label>
+              <label><input type="radio" name="i5" value="5">5</label>
+          </div>
+          <div class="question">6. 過去の出来事が、今になってじわじわと影響していると感じることがある。
+              <br>
+              <label><input type="radio" name="i6" value="1">1</label>
+              <label><input type="radio" name="i6" value="2">2</label>
+              <label><input type="radio" name="i6" value="3">3</label>
+              <label><input type="radio" name="i6" value="4">4</label>
+              <label><input type="radio" name="i6" value="5">5</label>
+          </div>
+      </div>
+      <button type="button" class="submit-btn">送信</button>
+  </form>
   <h1>アンケート → ライントレース用PIDコード生成</h1>
-
   <div class="section">
     <h2>アンケートスコア入力（0〜30）</h2>
     <div class="question">
@@ -63,6 +231,35 @@
     <h2>生成されたMakeCode用JavaScript</h2>
     <textarea id="outputCode" readonly></textarea>
   </div>
+  <script>
+  document.querySelector(".submit-btn").addEventListener("click", function () {
+      const getScore = (name) => {
+          const radios = document.getElementsByName(name);
+          for (let r of radios) {
+              if (r.checked) return parseInt(r.value);
+          }
+          return 0; // 未選択は0点とする
+      };
+  
+      const group = (prefix, count) => {
+          let total = 0;
+          for (let i = 1; i <= count; i++) {
+              total += getScore(`${prefix}${i}`);
+          }
+          return total;
+      };
+  
+      const scoreP = group("p", 6); // 比例
+      const scoreD = group("d", 6); // 微分
+      const scoreI = group("i", 6); // 積分
+  
+      alert(
+          `アンケート結果：\n\n比例スコア: ${scoreP}/30\n微分スコア: ${scoreD}/30\n積分スコア: ${scoreI}/30`
+      );
+  
+      // 今後：ここでゲイン設定や送信API処理なども追加可能
+  });
+  </script>
 
   <script>
     function generateCode() {
