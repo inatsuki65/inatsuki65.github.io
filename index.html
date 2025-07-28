@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>PIDライントレーサー生成ツール</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 20px;
+      background-color: #f9f9f9;
+    }
+    h1 {
+      color: #336699;
+    }
+    .question {
+      margin-bottom: 10px;
+    }
+    .section {
+      background: white;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    textarea {
+      width: 100%;
+      height: 400px;
+      font-family: monospace;
+      margin-top: 10px;
+    }
+    button {
+      background: #336699;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 1em;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    button:hover {
+      background: #19426b;
+    }
+  </style>
+</head>
+<body>
+  <h1>アンケート → ライントレース用PIDコード生成</h1>
+
+  <div class="section">
+    <h2>アンケートスコア入力（0〜30）</h2>
+    <div class="question">
+      比例スコア（0〜30）: <input type="number" id="scoreP" min="0" max="30" value="15">
+    </div>
+    <div class="question">
+      微分スコア（0〜30）: <input type="number" id="scoreD" min="0" max="30" value="15">
+    </div>
+    <div class="question">
+      積分スコア（0〜30）: <input type="number" id="scoreI" min="0" max="30" value="15">
+    </div>
+    <button onclick="generateCode()">コード生成</button>
+  </div>
+
+  <div class="section">
+    <h2>生成されたMakeCode用JavaScript</h2>
+    <textarea id="outputCode" readonly></textarea>
+  </div>
+
+  <script>
+    function generateCode() {
+      const scoreP = parseInt(document.getElementById("scoreP").value);
+      const scoreD = parseInt(document.getElementById("scoreD").value);
+      const scoreI = parseInt(document.getElementById("scoreI").value);
+
+      const Kp = Math.round(scoreP / 2); // 0〜15
+      const Kd = Math.round(scoreD / 3); // 0〜10
+      const Ki = Math.round(scoreI / 6); // 0〜5
+
+      const code = `
+let Kp = ${Kp}
+let Ki = ${Ki}
+let Kd = ${Kd}
+let integral = 0
+let lastError = 0
+
+basic.forever(function () {
+    let left = maqueen.readPatrol(maqueen.Patrol.PatrolLeft)
+    let right = maqueen.readPatrol(maqueen.Patrol.PatrolRight)
+    let error = right - left
+
+    integral = integral + error
+    let derivative = error - lastError
+    let correction = Kp * error + Ki * integral + Kd * derivative
+    lastError = error
+
+    let baseSpeed = 100
+    let leftSpeed = baseSpeed + correction
+    let rightSpeed = baseSpeed - correction
+
+    leftSpeed = Math.max(0, Math.min(255, leftSpeed))
+    rightSpeed = Math.max(0, Math.min(255, rightSpeed))
+
+    maqueen.MotorRun(maqueen.Motors.M1, maqueen.Dir.CW, leftSpeed)
+    maqueen.MotorRun(maqueen.Motors.M2, maqueen.Dir.CW, rightSpeed)
+    basic.pause(10)
+})
+`;
+
+      document.getElementById("outputCode").value = code;
+    }
+  </script>
+</body>
+</html>
