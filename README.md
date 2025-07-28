@@ -1,0 +1,1 @@
+# inatsuki65.github.io
