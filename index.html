@@ -161,7 +161,7 @@
           }
       };
 
-      document.getElementById("quizForm").addEventListener("submit", function(e) {
+      document.querySelector(".submit-btn").addEventListener("click", function(e) {
           e.preventDefault();
           const formData = new FormData(e.target);
           let scores = {P: 0, D: 0, I: 0};
@@ -207,9 +207,9 @@
           return total;
       };
   
-      const scoreP = group("p", 6); // 比例
-      const scoreD = group("d", 6); // 微分
-      const scoreI = group("i", 6); // 積分
+      const scoreP = group("P", 6); // 比例
+      const scoreD = group("D", 6); // 微分
+      const scoreI = group("I", 6); // 積分
   
       alert(
           `アンケート結果：\n\n比例スコア: ${scoreP}/30\n微分スコア: ${scoreD}/30\n積分スコア: ${scoreI}/30`
@@ -233,31 +233,36 @@
       const Ki = Math.round(scoreI / 6); // 0〜5
 
       const code = `
+let rightSpeed = 0
+let leftSpeed = 0
+let baseSpeed = 0
+let correction = 0
+let lastError = 0
+let derivative = 0
+let integral = 0
+let error = 0
+let right = 0
+let left = 0
 let Kp = ${Kp}
 let Ki = ${Ki}
 let Kd = ${Kd}
-let integral = 0
-let lastError = 0
 
 basic.forever(function () {
-    let left = maqueen.readPatrol(maqueen.Patrol.PatrolLeft)
-    let right = maqueen.readPatrol(maqueen.Patrol.PatrolRight)
-    let error = right - left
-
+    
+    left = maqueen.readPatrol(maqueen.Patrol.PatrolLeft)
+    right = maqueen.readPatrol(maqueen.Patrol.PatrolRight)
+    error = right - left
     integral = integral + error
-    let derivative = error - lastError
-    let correction = Kp * error + Ki * integral + Kd * derivative
+    derivative = error - lastError
+    correction = Kp * error + Ki * integral + Kd * derivative
     lastError = error
-
-    let baseSpeed = 100
-    let leftSpeed = baseSpeed + correction
-    let rightSpeed = baseSpeed - correction
-
+    baseSpeed = 10
+    leftSpeed = baseSpeed - correction
+    rightSpeed = baseSpeed + correction
     leftSpeed = Math.max(0, Math.min(255, leftSpeed))
     rightSpeed = Math.max(0, Math.min(255, rightSpeed))
-
-    maqueen.MotorRun(maqueen.Motors.M1, maqueen.Dir.CW, leftSpeed)
-    maqueen.MotorRun(maqueen.Motors.M2, maqueen.Dir.CW, rightSpeed)
+    maqueen.motorRun(maqueen.Motors.M1, maqueen.Dir.CW, leftSpeed)
+    maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CW, rightSpeed)
     basic.pause(10)
 })
 `;
