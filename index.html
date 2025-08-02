@@ -65,20 +65,20 @@
  <h1>知覚回路アンケート（ランダム18問）</h1>
     <form id="quizForm">
         <div id="questionContainer" class="block"></div>
-        <button type="button" class="submit-btn">送信</button>
+        <button type="button" class="submit-btn">集計</button>
     </form>
   
   <h1>アンケート → ライントレース用PIDコード生成</h1>
   <div class="section">
     <h2>アンケートスコア結果（0〜30）</h2>
     <div class="question">
-      比例スコア（0〜30）: <textarea id="scoreP" readonly></textarea>
+      比例スコア（0〜30）: <textarea id="scoreP"></textarea>
     </div>
     <div class="question">
-      微分スコア（0〜30）: <textarea id="scoreD" readonly></textarea>
+      微分スコア（0〜30）: <textarea id="scoreD"></textarea>
     </div>
     <div class="question">
-      積分スコア（0〜30）: <textarea id="scoreI" readonly></textarea>
+      積分スコア（0〜30）: <textarea id="scoreI"></textarea>
     </div>
     <button onclick="generateCode()">コード生成</button>
   </div>
