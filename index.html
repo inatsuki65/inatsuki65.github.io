@@ -229,8 +229,8 @@
       const scoreI = parseInt(document.getElementById("scoreI").value);
 
       const Kp = Math.round(scoreP / 2); // 0〜15
-      const Kd = Math.round(scoreD / 3); // 0〜10
-      const Ki = Math.round(scoreI / 6); // 0〜5
+      const Kd = Math.round(scoreD / 2); // 0〜15
+      const Ki = Math.round((scoreI / 60) * Math.pow( 10, 2 )) / Math.pow( 10, 2 ); // 0〜0.50
 
       const code = `
 let rightSpeed = 0
@@ -256,7 +256,7 @@ basic.forever(function () {
     derivative = error - lastError
     correction = Kp * error + Ki * integral + Kd * derivative
     lastError = error
-    baseSpeed = 10
+    baseSpeed = 11
     leftSpeed = baseSpeed - correction
     rightSpeed = baseSpeed + correction
     leftSpeed = Math.max(0, Math.min(255, leftSpeed))
