@@ -28,6 +28,40 @@
       font-family: monospace;
       margin-top: 10px;
     }
+    .copy-container {
+      position: relative;
+      max-width: 600px;
+      margin-bottom: 24px;
+    }
+
+    textarea#outputCode {
+      width: 100%;
+      height: 120px;
+      padding: 10px;
+      font-family: monospace;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      resize: vertical;
+      background: #fff;
+    }
+
+    .copy-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      padding: 6px 12px;
+      font-size: 12px;
+      border: none;
+      border-radius: 4px;
+      background: #336699;
+      color: white;
+      cursor: pointer;
+    }
+
+    .copy-btn:hover {
+      background: #1d4d7c;
+    }
     textarea#scoreP,
     textarea#scoreD,
     textarea#scoreI {
@@ -85,7 +119,10 @@
 
   <div class="section">
     <h2>生成されたMakeCode用JavaScript</h2>
-    <textarea id="outputCode" readonly></textarea>
+    <div class="copy-container">
+      <textarea id="outputCode" readonly></textarea>
+      <button class="copy-btn" onclick="copyText()">コピー</button>
+    </div>
   </div>
   <div id="result"></div>
   <script>
@@ -268,6 +305,16 @@ basic.forever(function () {
 `;
 
       document.getElementById("outputCode").value = code;
+    }
+  </script>
+  <script>
+    function copyText() {
+      const text = document.getElementById("outputCode").value;
+      navigator.clipboard.writeText(text).then(() => {
+        alert("コピーしました！");
+      }).catch(err => {
+        alert("コピーに失敗しました: " + err);
+      });
     }
   </script>
 </body>
