@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>PIDライントレーサー生成ツール</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 20px;
+      background-color: #f9f9f9;
+    }
+    h1 {
+      color: #336699;
+    }
+    .question {
+      margin-bottom: 10px;
+    }
+    .section {
+      background: white;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    textarea {
+      width: 100%;
+      height: 400px;
+      font-family: monospace;
+      margin-top: 10px;
+    }
+    .copy-container {
+      position: relative;
+      max-width: 600px;
+      margin-bottom: 24px;
+    }
+
+    textarea#outputCode {
+      width: 100%;
+      height: 120px;
+      padding: 10px;
+      font-family: monospace;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      resize: vertical;
+      background: #fff;
+    }
+    .title {
+      font-size: 24px;      /* 文字サイズを大きくする */
+      font-weight: bold;    /* 太字にする */
+    }
+    .copy-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      padding: 6px 12px;
+      font-size: 12px;
+      border: none;
+      border-radius: 4px;
+      background: #336699;
+      color: white;
+      cursor: pointer;
+    }
+
+    .copy-btn:hover {
+      background: #1d4d7c;
+    }
+    textarea#scoreP,
+    textarea#scoreD,
+    textarea#scoreI {
+      width: 100px;
+      height: 25px;
+      font-size: 14px;
+      padding: 4px;
+      resize: none; /* ユーザーによるリサイズを無効化（任意） */
+    }
+
+    button {
+      background: #336699;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 1em;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    button:hover {
+      background: #19426b;
+    }
+  </style>
+  <style>
+    body { font-family: sans-serif; background: #f4f4f4; padding: 24px; }
+    h2 { margin-top: 32px; color: #336699;}
+    .block { background: #fff; border-radius: 8px; padding: 16px 24px; margin-bottom: 20px; box-shadow: 0 2px 8px #ccc;}
+    .question { margin-bottom: 12px; }
+    label { margin-right: 14px; }
+    .submit-btn { background: #336699; color: #fff; padding: 10px 30px; border: none; border-radius: 6px; font-size: 1rem; margin-top: 24px; cursor: pointer;}
+    .submit-btn:hover { background: #19426b; }
+  </style>
+</head>
+<body>
+ <h1>知覚回路アンケート（ランダム18問）</h1>
+    <form id="quizForm">
+        <div id="questionContainer" class="block"></div>
+        <button type="button" class="submit-btn">集計</button>
+    </form>
+  
+  <h1>アンケート → ライントレース用PIDコード生成</h1>
+  <div class="section">
+    <h2>アンケートスコア結果（0〜30）</h2>
+    <div class="question">
+      比例スコア（0〜30）: <textarea id="scoreP"></textarea>
+    </div>
+    <div class="question">
+      微分スコア（0〜30）: <textarea id="scoreD"></textarea>
+    </div>
+    <div class="question">
+      積分スコア（0〜30）: <textarea id="scoreI"></textarea>
+    </div>
+    <button onclick="generateCode()">コード生成</button>
+  </div>
+
+  <div class="section">
+    <h2>生成されたMakeCode用JavaScript</h2>
+    <div class="copy-container">
+      <textarea id="outputCode" readonly></textarea>
+      <button class="copy-btn" onclick="copyText()">コピー</button>
+    </div>
+  </div>
+  <div id="result"></div>
+  <script>
+      const questions = {
+          P: [
+              "目の前の課題には、まず『やるべきこと』を整理して取り組む。",
+              "状況に合わせて行動を柔軟に変えるのは得意だ。",
+              "現実的で実務的な話の方が、抽象的な話よりわかりやすい。",
+              "予定が崩れるとストレスを感じる。",
+              "『今この場で何が必要か』を考えて動くことが多い。",
+              "他人の発言は、まず言葉通りに受け取る。",
+              "計画を立てると安心するタイプだ。",
+              "効率的に物事を進めるのが好きだ。",
+              "ToDoリストを作る習慣がある。",
+              "指示が明確な方が行動しやすい。",
+              "目の前の作業に集中しやすい。",
+              "すぐに成果が出るタスクの方がやる気が出る。"
+          ],
+          D: [
+              "人の表情やしぐさのわずかな変化にすぐ気づく。",
+              "空気が変わったときに、言葉にできない違和感を感じることが多い。",
+              "初対面でも『この人とは合わなそう』とすぐに察する。",
+              "『なんとなくイヤな予感がする』が的中することがある。",
+              "言葉よりも、その時の『雰囲気』が気になってしまう。",
+              "他人の言動に過剰に反応してしまうことがある。",
+              "集団の空気の変化に敏感だ。",
+              "タイミングのずれが気になりやすい。",
+              "直感を頼りにすることが多い。",
+              "人の細かな癖をすぐ覚える。",
+              "違和感に敏感で、その理由を探りたくなる。",
+              "場の空気を読むことが疲れることがある。"
+          ],
+          I: [
+              "映画や本を見た後、その感情が長く残る方だ。",
+              "今の自分があるのは、過去の経験の積み重ねだと感じる。",
+              "人の言葉の『背景』や『事情』を自然と想像してしまう。",
+              "初対面の人でも『この人の人生には何があったんだろう』と気になる。",
+              "自分に起きた出来事には、何かしら意味があると感じる。",
+              "過去の出来事が、今になってじわじわと影響していると感じることがある。",
+              "誰かの一言を何年経っても覚えていることがある。",
+              "子供の頃の記憶が今でも鮮明に残っている。",
+              "他人の悩みや感情を自分のことのように感じることがある。",
+              "過去に経験した感情が、似たような場面で再びよみがえることがある。",
+              "感情を日記や文章に書くことで気持ちが整理される。",
+              "過去の出来事を何度も思い返し、意味づけを変えることがある。"
+          ]
+      };
+
+      const getRandomSubset = (arr, count) => {
+          const shuffled = [...arr].sort(() => 0.5 - Math.random());
+          return shuffled.slice(0, count);
+      };
+
+      const renderQuestions = () => {
+          const container = document.getElementById('questionContainer');
+          const selected = {
+              P: getRandomSubset(questions.P, 6),
+              D: getRandomSubset(questions.D, 6),
+              I: getRandomSubset(questions.I, 6)
+          };
+          let index = 1;
+          for (const [prefix, list] of Object.entries(selected)) {
+              list.forEach((q, i) => {
+                  const div = document.createElement('div');
+                  div.className = 'question';
+                  if (index == 1) {
+                     div.innerHTML = `<p class="title">比例回路＝今のありのままの現実をとらえる力。</p><br>`;
+                  } else if (index == 7) {
+                     div.innerHTML = `<p class="title">微分回路＝ちょっとした変化や兆候をとらえる力。</p><br>`;
+                  } else if (index == 13) {
+                     div.innerHTML = `<p class="title">積分回路＝蓄積した経験によって物事をとらえる力。</p><br>`;
+                  };
+                  div.innerHTML += `${index}. ${q}<br>` +
+                      Array.from({length: 5}, (_, j) =>
+                          `<label><input type="radio" name="${prefix}${i + 1}" value="${j + 1}" required>${j + 1}</label>`
+                      ).join(' ');
+                  container.appendChild(div);
+                  index++;
+              });
+          }
+      };
+
+      document.querySelector(".submit-btn").addEventListener("click", function(e) {
+          e.preventDefault();
+          const formData = new FormData(e.target);
+          let scores = {P: 0, D: 0, I: 0};
+
+          for (let [key, val] of formData.entries()) {
+              if (key.startsWith('P')) scores.P += parseInt(val);
+              if (key.startsWith('D')) scores.D += parseInt(val);
+              if (key.startsWith('I')) scores.I += parseInt(val);
+          }
+
+          // 正規化（0.0〜1.0）してPIDゲインとして使えるように
+          const normalize = (s) => (s / 30).toFixed(2); // 6問×5点満点 = 30点満点
+          const kp = normalize(scores.P);
+          const kd = normalize(scores.D);
+          const ki = normalize(scores.I);
+
+          const result = document.getElementById("result");
+          result.innerHTML = `
+              <h2>アンケート結果</h2>
+              <p>比例ゲイン (Kp): ${kp}</p>
+              <p>微分ゲイン (Kd): ${kd}</p>
+              <p>積分ゲイン (Ki): ${ki}</p>
+          `;
+      });
+
+      renderQuestions();
+  </script>
+  <script>
+  document.querySelector(".submit-btn").addEventListener("click", function () {
+      const getScore = (name) => {
+          const radios = document.getElementsByName(name);
+          for (let r of radios) {
+              if (r.checked) return parseInt(r.value);
+          }
+          return 0; // 未選択は0点とする
+      };
+  
+      const group = (prefix, count) => {
+          let total = 0;
+          for (let i = 1; i <= count; i++) {
+              total += getScore(`${prefix}${i}`);
+          }
+          return total;
+      };
+  
+      const scoreP = group("P", 6); // 比例
+      const scoreD = group("D", 6); // 微分
+      const scoreI = group("I", 6); // 積分
+  
+      alert(
+          `アンケート結果：\n\n比例スコア: ${scoreP}/30\n微分スコア: ${scoreD}/30\n積分スコア: ${scoreI}/30`
+      );
+  
+      // 今後：ここでゲイン設定や送信API処理なども追加可能
+      document.getElementById("scoreP").value=scoreP;
+      document.getElementById("scoreD").value=scoreD;
+      document.getElementById("scoreI").value=scoreI;
+  });
+  </script>
+
+  <script>
+    function generateCode() {
+      const scoreP = parseInt(document.getElementById("scoreP").value);
+      const scoreD = parseInt(document.getElementById("scoreD").value);
+      const scoreI = parseInt(document.getElementById("scoreI").value);
+
+      const Kp = Math.round(scoreP / 2); // 0〜15
+      const Kd = Math.round(scoreD / 2); // 0〜15
+      const Ki = Math.round((scoreI / 60) * Math.pow( 10, 2 )) / Math.pow( 10, 2 ); // 0〜0.50
+
+      const code = `
+let rightSpeed = 0
+let leftSpeed = 0
+let baseSpeed = 0
+let correction = 0
+let lastError = 0
+let derivative = 0
+let integral = 0
+let error = 0
+let right = 0
+let left = 0
+let Kp = ${Kp}
+let Ki = ${Ki}
+let Kd = ${Kd}
+
+basic.forever(function () {
+    
+    left = maqueen.readPatrol(maqueen.Patrol.PatrolLeft)
+    right = maqueen.readPatrol(maqueen.Patrol.PatrolRight)
+    error = right - left
+    integral = integral + error
+    derivative = error - lastError
+    correction = Kp * error + Ki * integral + Kd * derivative
+    lastError = error
+    baseSpeed = 11
+    leftSpeed = baseSpeed - correction
+    rightSpeed = baseSpeed + correction
+    leftSpeed = Math.max(0, Math.min(255, leftSpeed))
+    rightSpeed = Math.max(0, Math.min(255, rightSpeed))
+    maqueen.motorRun(maqueen.Motors.M1, maqueen.Dir.CW, leftSpeed)
+    maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CW, rightSpeed)
+    basic.pause(10)
+})
+`;
+
+      document.getElementById("outputCode").value = code;
+    }
+  </script>
+  <script>
+    function copyText() {
+      const text = document.getElementById("outputCode").value;
+      navigator.clipboard.writeText(text).then(() => {
+        alert("コピーしました！");
+      }).catch(err => {
+        alert("コピーに失敗しました: " + err);
+      });
+    }
+  </script>
+</body>
+</html>
+
